@@ -1,11 +1,11 @@
-package Service;
+package api.Service;
 
-import Model.Product;
-import Repository.ProductRepository;
+import api.Model.Product;
+import api.Repository.ProductRepository;
+import api.ServicoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,12 +27,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) {
+        return productRepository
+                .findById(id)
+                .orElseThrow(() -> new ServicoException("Produto não encontrado!"));
     }
 
     @Override
-    public Product update(Product product) {
+    public Product update(Long id, Product product) {
+        product.setId(id);
         return productRepository.save(product);
     }
 
